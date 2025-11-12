@@ -1,16 +1,22 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement Instance { get; private set; }
+    public NavMeshAgent agent;
+    public Vector3 target;
 
     private bool isMoving = false;
+
 
     private void Awake()
     {
         if (Instance == null)
         {
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -18,6 +24,11 @@ public class PlayerMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Update() {
+        if (target != null)
+            agent.SetDestination(target);
     }
 
     public void OnClick(Vector2 locationToMove)
